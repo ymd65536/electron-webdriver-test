@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>WebDriverTest</title>
+</head>
+
+<style>
+  [v-cloak] {
+    display: none;
+  }
+</style>
+
+<body>
+  <div id="app" v-cloak>
+    <p>セッションID：{{sessionId}}</p>
+    <p>ブラウザの状態：{{state}}</p>
+    <p>ブラウザ タイトル：{{title}}</p>
+    <button v-on:click="OpenBrowser">Open</button>
+    <button v-on:click="CloseBrowser">Close</button>
+    <button v-on:click="GetTitle">GetTitle</button>
+    <input type="text" v-model:value="navigate_url">
+    <button v-on:click="NavigateUrl">NavigateUrl</button>
+    <hr />
+    <pre>{{ ResponseData }}</pre>
+    <hr />
+    <pre>{{ $data }}</pre>
+  </div>
+  <script src="js\vue.js"></script>
+  <script src="js\axios.min.js"></script>
+</body>
+
+<script>
+  // WebDriverはローカルPCに対しても有効
+  var app = new Vue({
+    el: '#app',
+    data: {
+      sessionId: null,
+      //url: 'http://10.211.33.27:9515/session',
+      url: 'http://localhost:9515/session',
+      state: 'close',
+      title: 'title',
+      navigate_url: '',
+      ResponseData: null
+    },
+    methods: {
+      CloseBrowser: function () {
+        axios.delete(this.url + '/' + this.sessionId)
+          .then(function (responce) {
+            this.state = 'close'
+            this.sessionId = ''
+            this.title = ''
+          }.bind(this))
+          .catch(function (error) {
+            this.state = 'Error'
+          }.bind(this))
+          .finally(function () {
+          }.bind(this))
+      },
+      OpenBrowser: function () {
+        axios.post(this.url, {
+          capabilities: {}
+        }).then(function (responce) {
+          this.sessionId = responce.data.value.sessionId
+          this.state = 'open'
+          this.ResponseData = responce.data
+        }.bind(this))
+          .catch(function (error) {
+            this.state = 'Error'
+          }.bind(this))
+          .finally(function () {
+          }.bind(this))
+      },
+      GetTitle: function () {
+        axios.get(this.url + '/' + this.sessionId + '/title')
+          .then(function (responce) {
+            this.title = responce.data.value
+          }.bind(this))
+          .catch(function (error) {
+            this.state = 'Error'
+          }.bind(this))
+          .finally(function () {
+          }.bind(this))
+      },
+      NavigateUrl: function () {
+        if (this.sessionId == null) {
+          this.state = 'Error'
+        } else {
+          axios.post(this.url + '/' + this.sessionId + '/url', {
+            url: this.navigate_url
+          }).then(function (responce) {
+            this.title = responce.data
+          }.bind(this))
+            .catch(function (error) {
+            }.bind(this))
+            .finally(function () {
+            }.bind(this))
+
+          axios.get(this.url + '/' + this.sessionId + '/title')
+            .then(function (responce) {
+              this.title = responce.data.value
+            }.bind(this))
+            .catch(function (error) {
+              this.state = 'Error'
+            }.bind(this))
+            .finally(function () {
+            }.bind(this))
+        }
+      }
+    }
+  });
+</script>
+
+</html>
