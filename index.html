@@ -43,6 +43,8 @@
       state: 'close',
       title: 'title',
       navigate_url: '',
+      const_element: 'element-6066-11e4-a52e-4f735466cecf',
+      get_elements: null,
       ResponseData: null
     },
     methods: {
@@ -118,6 +120,7 @@
             value: "[name='q']"
           }).then(function (responce) {
             this.ResponseData = responce.data
+            this.get_elements = responce.data.value
           }.bind(this))
             .catch(function (error) {
             }.bind(this))
