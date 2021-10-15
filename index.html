@@ -22,7 +22,13 @@
     <button v-on:click="GetTitle">GetTitle</button>
     <input type="text" v-model:value="navigate_url">
     <button v-on:click="NavigateUrl">NavigateUrl</button>
-    <button v-on:click="GetElementsCssSelector">GetElementsCssSelector</button>
+    <div>
+      <button v-on:click="GetElementsCssSelector">GetElementsCssSelector</button>
+    </div>
+    <div>
+      <input type="text" v-model:value="element_id" />
+      <button v-on:click="GetElementText">GetElementText</button>
+    </div>
     <hr />
     <pre>{{ ResponseData }}</pre>
     <hr />
@@ -45,6 +51,7 @@
       navigate_url: '',
       const_element: 'element-6066-11e4-a52e-4f735466cecf',
       get_elements: null,
+      element_id: '',
       ResponseData: null
     },
     methods: {
@@ -117,7 +124,7 @@
         } else {
           axios.post(this.url + '/' + this.sessionId + '/elements', {
             using: "css selector",
-            value: "[name='q']"
+            value: "[class='headTool v-internal']"
           }).then(function (responce) {
             this.ResponseData = responce.data
             this.get_elements = responce.data.value
@@ -127,6 +134,17 @@
             .finally(function () {
             }.bind(this))
         }
+      },
+      GetElementText: function () {
+        axios.get(this.url + '/' + this.sessionId + '/element' + '/' + this.element_id + '/text')
+          .then(function (responce) {
+            this.ResponseData = responce.data.value
+          }.bind(this))
+          .catch(function (error) {
+            this.state = 'Error'
+          }.bind(this))
+          .finally(function () {
+          }.bind(this))
       }
     }
   });
