@@ -22,6 +22,7 @@
     <button v-on:click="GetTitle">GetTitle</button>
     <input type="text" v-model:value="navigate_url">
     <button v-on:click="NavigateUrl">NavigateUrl</button>
+    <button v-on:click="GetElementsCssSelector">GetElementsCssSelector</button>
     <hr />
     <pre>{{ ResponseData }}</pre>
     <hr />
@@ -103,6 +104,22 @@
             }.bind(this))
             .catch(function (error) {
               this.state = 'Error'
+            }.bind(this))
+            .finally(function () {
+            }.bind(this))
+        }
+      },
+      GetElementsCssSelector: function () {
+        if (this.sessionId == null) {
+          this.state = 'Error'
+        } else {
+          axios.post(this.url + '/' + this.sessionId + '/elements', {
+            using: "css selector",
+            value: "[name='q']"
+          }).then(function (responce) {
+            this.ResponseData = responce.data
+          }.bind(this))
+            .catch(function (error) {
             }.bind(this))
             .finally(function () {
             }.bind(this))
