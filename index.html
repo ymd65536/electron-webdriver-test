@@ -23,6 +23,7 @@
     <input type="text" v-model:value="navigate_url">
     <button v-on:click="NavigateUrl">NavigateUrl</button>
     <div>
+      <input type="text" v-model:value="css_selector" />
       <button v-on:click="GetElementsCssSelector">GetElementsCssSelector</button>
     </div>
     <div>
@@ -51,6 +52,7 @@
       navigate_url: '',
       const_element: 'element-6066-11e4-a52e-4f735466cecf',
       get_elements: null,
+      css_selector: '',
       element_id: '',
       ResponseData: null
     },
@@ -124,7 +126,7 @@
         } else {
           axios.post(this.url + '/' + this.sessionId + '/elements', {
             using: "css selector",
-            value: "[class='headTool v-internal']"
+            value: "[" + this.css_selector + "]"
           }).then(function (responce) {
             this.ResponseData = responce.data
             this.get_elements = responce.data.value
