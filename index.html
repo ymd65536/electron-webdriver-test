@@ -20,8 +20,10 @@
     <button v-on:click="OpenBrowser">Open</button>
     <button v-on:click="CloseBrowser">Close</button>
     <button v-on:click="GetTitle">GetTitle</button>
-    <input type="text" v-model:value="navigate_url">
-    <button v-on:click="NavigateUrl">NavigateUrl</button>
+    <div>
+      <input type="text" v-model:value="navigate_url">
+      <button v-on:click="NavigateUrl">NavigateUrl</button>
+    </div>
     <div>
       <input type="text" v-model:value="css_selector" />
       <button v-on:click="GetElementsCssSelector">GetElementsCssSelector</button>
